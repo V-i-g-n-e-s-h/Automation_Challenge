@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 from typing import List, Dict
 
 from utils.logger import get_logger
@@ -7,7 +8,16 @@ from utils.logger import get_logger
 
 logger = get_logger()
 
-def save_to_json(posts: List[Dict[str, str]], filename: str = "data/posts.json") -> None:
+def get_json_filename() -> str:
+    """Generates a timestamped JSON file path for storing social media posts.
+
+    Returns:
+        str: A string representing the full file path in the 'data/' directory,
+            with the filename formatted as 'posts-YYYY-MM-DD-HH-MM-SS.json'.
+    """
+    return os.path.join("data", f"posts{datetime.now().strftime('-%Y-%m-%d-%H-%M-%S')}.json")
+
+def save_to_json(posts: List[Dict[str, str]], filename: str = get_json_filename()) -> None:
     """
     Saves a list of posts to a JSON file.
 

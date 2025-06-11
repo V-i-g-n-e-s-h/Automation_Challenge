@@ -4,10 +4,12 @@ import feedparser
 
 import const
 from .logger import get_logger
+from .retry import retry
 
 
 logger = get_logger()
 
+@retry(max_retries=1, delay=2, exceptions=(Exception,))
 def fetch_latest_ft_articles(limit: int = 3) -> List[Dict[str, str]]:
     """
     Fetch latest articles from Financial Times RSS.

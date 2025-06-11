@@ -4,9 +4,23 @@ from typing import Dict
 from dotenv import load_dotenv
 import openai
 
+from .retry import retry
+
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+@retry(max_retries=1, delay=3)
+def call_openai(prompt: str):
+    return openai.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": "You are a social media copywriter for a financial news brand."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.7,
+        max_tokens=100,
+    )
 
 def rewrite_as_social_post(article: Dict[str, str]) -> str:
     """
@@ -39,15 +53,7 @@ It should include a bold hook and a clear call-to-action. Keep it under 200 char
 Social Media Post:"""
     )
 
-    response = openai.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": "You are a social media copywriter for a financial news brand."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.7,
-        max_tokens=100
-    )
+    response = call_openai(prompt=prompt)
 
     reply = response.choices[0].message.content
     return reply

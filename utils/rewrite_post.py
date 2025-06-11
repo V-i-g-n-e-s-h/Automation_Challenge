@@ -43,6 +43,8 @@ def rewrite_as_social_post(article: Dict[str, str]) -> str:
 f"""Turn the following headline and summary into a short, punchy social media post.
 
 It should include a bold hook and a clear call-to-action. Keep it under 200 characters.
+
+DO NOT INCLUDE ANY LINKS OR PLACEHOLDERS LIKE '[Link]' IN THE OUTPUT.
 ---
 ## Headline: 
 {title}
